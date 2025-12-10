@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - BLACKCORE Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f3f4f6;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: var(--darker);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--darker);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .department-item {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .department-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.1);
+        }
+
+        .department-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .department-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--darker);
+        }
+
+        .keywords-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .keyword-tag {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mode-card {
+            padding: 25px;
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .mode-card.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        }
+
+        .mode-card .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .mode-card .title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--darker);
+            margin-bottom: 10px;
+        }
+
+        .mode-card .description {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .schedule-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .schedule-row {
+            display: grid;
+            grid-template-columns: 150px 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .schedule-day {
+            font-weight: 600;
+            color: var(--darker);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .backup-item {
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .backup-info {
+            flex: 1;
+        }
+
+        .backup-name {
+            font-weight: 600;
+            color: var(--darker);
+        }
+
+        .backup-date {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* ESTILOS PARA FLUXOS */
+        .flow-card {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .flow-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .flow-card.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .flow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .flow-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--darker);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-trigger {
+            background: var(--warning);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .flow-description {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .flow-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .flow-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .step-list {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .step-item {
+            padding: 15px;
+            background: #f9fafb;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .step-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .step-type-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .step-message {
+            color: #4b5563;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-header h2 {
+            color: var(--darker);
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .menu-option-item {
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .menu-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 968px) {
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span>⚙️</span>
+                <span>Configurações do Bot</span>
+            </h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="location.href='/'">
+                    🏠 Dashboard
+                </button>
+                <button class="btn btn-success" onclick="saveAllConfig()">
+                    💾 Salvar Tudo
+                </button>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- Tabs de Navegação -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('geral')">🎯 Geral</button>
+            <button class="tab" onclick="switchTab('fluxos')">🔄 Fluxos</button>
+            <button class="tab" onclick="switchTab('departamentos')">🏢 Departamentos</button>
+            <button class="tab" onclick="switchTab('ia')">🧠 IA</button>
+            <button class="tab" onclick="switchTab('seguranca')">🔒 Segurança</button>
+            <button class="tab" onclick="switchTab('horarios')">🕐 Horários</button>
+            <button class="tab" onclick="switchTab('notificacoes')">🔔 Notificações</button>
+            <button class="tab" onclick="switchTab('backup')">💾 Backup</button>
+        </div>
+
+        <!-- TAB: GERAL -->
+        <div id="tab-geral" class="tab-content active">
+            <!-- Modo de Operação -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🤖 Modo de Operação</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="mode-selector">
+                        <div class="mode-card" id="modeAtendimento" onclick="selectMode('atendimento')">
+                            <div class="icon">🧠</div>
+                            <div class="title">Atendimento com IA</div>
+                            <div class="description">IA responde automaticamente todas as mensagens com fluxos personalizados e aprendizado contínuo</div>
+                        </div>
+                        <div class="mode-card" id="modeTriagem" onclick="selectMode('triagem')">
+                            <div class="icon">📋</div>
+                            <div class="title">Triagem</div>
+                            <div class="description">Direciona usuários para departamentos específicos através de menu interativo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações Básicas -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📝 Informações Básicas</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Nome do Bot:</label>
+                        <input type="text" id="botName" placeholder="Ex: BLACKCORE Assistant">
+                        <small>Este nome será usado em mensagens e logs</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensagem de Saudação:</label>
+                        <textarea id="greetingMessage" placeholder="Ex: Olá! Sou o assistente virtual da BLACKCORE..."></textarea>
+                        <small>Primeira mensagem que o usuário recebe ao iniciar conversa</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensagem de Primeira Vez:</label>
+                        <textarea id="firstTimeMessage" placeholder="Ex: Seja bem-vindo! É seu primeiro contato conosco!"></textarea>
+                        <small>Mensagem especial para novos usuários</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Mostrar Menu Inicial:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="showMenu">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Exibe menu de opções automaticamente após saudação</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensagens de Fallback -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🔄 Mensagens de Fallback</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Mensagem Padrão (quando não entende):</label>
+                        <textarea id="fallbackMessage" placeholder="Ex: Desculpe, não entendi. Pode reformular?"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Limite de Tentativas:</label>
+                            <input type="number" id="retryLimit" min="1" max="10" value="3">
+                            <small>Quantas vezes o usuário pode tentar antes de transferir</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <span>Transferir após limite:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="transferAfterLimit">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensagem ao Transferir:</label>
+                        <textarea id="transferMessage" placeholder="Ex: Vou te conectar com um atendente para te ajudar melhor!"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: FLUXOS -->
+        <div id="tab-fluxos" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🔄 Gerenciar Fluxos de Conversação</h2>
+                    <button class="btn btn-success" onclick="createNewFlow()">
+                        ➕ Criar Novo Fluxo
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-info">
+                        <span>💡</span>
+                        <span>Fluxos controlam toda a conversa do bot. Clique em um fluxo para ver e editar os steps.</span>
+                    </div>
+                    <div id="flowsList">
+                        <div class="loading"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: DEPARTAMENTOS -->
+        <div id="tab-departamentos" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🏢 Departamentos</h2>
+                    <button class="btn btn-success" onclick="addDepartment()">
+                        ➕ Adicionar Departamento
+                    </button>
+                </div>
+                <div class="panel-body" id="departmentsList">
+                    <div class="loading"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: IA -->
+        <div id="tab-ia" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🧠 Configurações de IA</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>IA Habilitada:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="aiEnabled">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Ativar/desativar sistema de IA para respostas automáticas</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Modo de Aprendizado:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="learningMode">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>IA aprende automaticamente com conversas aprovadas</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Auto Melhoramento:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoImprove">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>IA se melhora sozinha com base em feedback</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Usar IA em Fluxos:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="useInFlows">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Permitir respostas da IA dentro dos fluxos configurados</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Confiança Mínima (0.0 - 1.0):</label>
+                            <input type="number" id="minConfidence" min="0" max="1" step="0.05" placeholder="0.75">
+                            <small>Nível mínimo de confiança para usar resposta da IA</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Máximo de Mensagens no Contexto:</label>
+                            <input type="number" id="maxContextMessages" min="1" max="50" placeholder="10">
+                            <small>Quantas mensagens anteriores a IA considera</small>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span>💡</span>
+                        <span>Quanto maior a confiança mínima, mais seguras são as respostas, mas menos perguntas serão respondidas pela IA.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: SEGURANÇA -->
+        <div id="tab-seguranca" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🔒 Segurança & Rate Limiting</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Máximo de Mensagens por Minuto:</label>
+                            <input type="number" id="maxMessagesPerMinute" min="1" max="100" placeholder="30">
+                            <small>Limite de mensagens que um usuário pode enviar por minuto</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Timeout de Sessão (milissegundos):</label>
+                            <input type="number" id="sessionTimeout" placeholder="1800000">
+                            <small>Tempo até sessão expirar (1800000 = 30 minutos)</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Máximo de Tentativas por Step:</label>
+                        <input type="number" id="maxRetriesPerStep" min="1" max="10" value="3">
+                        <small>Quantas vezes o usuário pode errar antes de avançar/transferir</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Bloquear Spam:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="blockSpam">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Bloqueia automaticamente números que enviam spam</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Criptografar Banco de Dados:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="encryptDatabase">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Criptografa dados sensíveis no banco</small>
+                    </div>
+
+                    <div class="alert alert-error">
+                        <span>⚠️</span>
+                        <span>Atenção: Configurações muito restritivas podem bloquear usuários legítimos!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: HORÁRIOS -->
+        <div id="tab-horarios" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🕐 Horário de Atendimento</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Ativar Horário de Atendimento:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="businessHoursEnabled" onchange="toggleBusinessHours()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Define horários em que o bot responde automaticamente</small>
+                    </div>
+
+                    <div id="businessHoursConfig" style="display: none;">
+                        <div class="form-group">
+                            <label>Fuso Horário:</label>
+                            <select id="timezone">
+                                <option value="America/Sao_Paulo">São Paulo (GMT-3)</option>
+                                <option value="America/Rio_Branco">Acre (GMT-5)</option>
+                                <option value="America/Manaus">Amazonas (GMT-4)</option>
+                                <option value="America/Noronha">Fernando de Noronha (GMT-2)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Horários por Dia da Semana:</label>
+                            <div class="schedule-grid" id="scheduleGrid">
+                                <!-- Será preenchido via JS -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mensagem Fora do Horário:</label>
+                            <textarea id="offlineMessage" placeholder="Ex: Estamos fora do horário de atendimento. Retornamos às 9h!"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <span>Responder Automaticamente Fora do Horário:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="autoReplyOffline">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: NOTIFICAÇÕES -->
+        <div id="tab-notificacoes" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>🔔 Notificações</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Notificar Novo Lead:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifyNewLead">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Receber notificação quando houver novo lead qualificado</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Notificar Transferência para Humano:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifyTransferHuman">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Alerta quando bot transfere para atendente humano</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Notificar Alta Prioridade:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifyHighPriority">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Alerta imediato para casos de alta prioridade</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <span>Notificar Sentimento Negativo:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notifyNegativeSentiment">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                        <small>Alerta quando detectar cliente insatisfeito</small>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span>📧</span>
+                        <span>Em breve: Integração com email, Slack, Telegram para receber notificações!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: BACKUP -->
+        <div id="tab-backup" class="tab-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>💾 Backup & Restauração</h2>
+                    <button class="btn btn-warning" onclick="createBackup()">
+                        💾 Criar Backup Agora
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-info">
+                        <span>ℹ️</span>
+                        <span>Backups automáticos são criados toda vez que você salva as configurações</span>
+                    </div>
+
+                    <div id="backupsList">
+                        <div class="loading"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let currentConfig = {};
+        let currentFlowId = null;
+        let currentStepIndex = null;
+        let menuOptionCount = 0;
+        const socket = io();
+
+        // Carregar configuração ao iniciar
+        window.addEventListener('load', () => {
+            loadConfig();
+            loadBackups();
+        });
+
+        // Switch entre tabs
+        function switchTab(tabName) {
+            // Remover active de todas tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+            // Ativar tab clicada
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            // Carregar fluxos quando abrir a aba
+            if (tabName === 'fluxos') {
+                renderFlows();
+            }
+        }
+
+        // Carregar configuração da API
+        async function loadConfig() {
+            try {
+                showAlert('Carregando configurações...', 'info');
+                
+                const response = await fetch('/api/config');
+                const data = await response.json();
+
+                if (data.success) {
+                    currentConfig = data.data;
+                    populateForm();
+                    showAlert('Configurações carregadas com sucesso!', 'success');
+                }
+            } catch (error) {
+                showAlert('Erro ao carregar configuração: ' + error.message, 'error');
+            }
+        }
+
+        // Preencher formulário com dados
+        function populateForm() {
+            // Modo
+            document.getElementById('mode' + capitalizeFirstLetter(currentConfig.mode)).classList.add('active');
+
+            // Informações básicas
+            document.getElementById('botName').value = currentConfig.botName || '';
+            document.getElementById('greetingMessage').value = currentConfig.greeting?.message || '';
+            document.getElementById('firstTimeMessage').value = currentConfig.greeting?.first_time_message || '';
+            document.getElementById('showMenu').checked = currentConfig.greeting?.show_menu || false;
+
+            // Fallback
+            document.getElementById('fallbackMessage').value = currentConfig.fallback?.message || '';
+            document.getElementById('retryLimit').value = currentConfig.fallback?.retry_limit || 3;
+            document.getElementById('transferAfterLimit').checked = currentConfig.fallback?.transfer_after_limit || false;
+            document.getElementById('transferMessage').value = currentConfig.fallback?.transfer_message || '';
+
+            // IA
+            document.getElementById('aiEnabled').checked = currentConfig.ai?.enabled || false;
+            document.getElementById('learningMode').checked = currentConfig.ai?.learning_mode || false;
+            document.getElementById('autoImprove').checked = currentConfig.ai?.auto_improve || false;
+            document.getElementById('useInFlows').checked = currentConfig.ai?.use_in_flows || false;
+            document.getElementById('minConfidence').value = currentConfig.ai?.min_confidence || 0.75;
+            document.getElementById('maxContextMessages').value = currentConfig.ai?.max_context_messages || 10;
+
+            // Segurança
+            document.getElementById('maxMessagesPerMinute').value = currentConfig.security?.max_messages_per_minute || 30;
+            document.getElementById('sessionTimeout').value = currentConfig.security?.session_timeout || 1800000;
+            document.getElementById('maxRetriesPerStep').value = currentConfig.security?.max_retries_per_step || 3;
+            document.getElementById('blockSpam').checked = currentConfig.security?.block_spam || false;
+            document.getElementById('encryptDatabase').checked = currentConfig.security?.encrypt_database || false;
+
+            // Horários
+            const bhEnabled = currentConfig.business_hours?.enabled || false;
+            document.getElementById('businessHoursEnabled').checked = bhEnabled;
+            document.getElementById('businessHoursConfig').style.display = bhEnabled ? 'block' : 'none';
+            document.getElementById('timezone').value = currentConfig.business_hours?.timezone || 'America/Sao_Paulo';
+            document.getElementById('offlineMessage').value = currentConfig.business_hours?.offline_message || '';
+            document.getElementById('autoReplyOffline').checked = currentConfig.business_hours?.auto_reply_offline || false;
+
+            // Renderizar horários
+            renderSchedule();
+
+            // Notificações
+            document.getElementById('notifyNewLead').checked = currentConfig.notifications?.new_lead || false;
+            document.getElementById('notifyTransferHuman').checked = currentConfig.notifications?.transfer_to_human || false;
+            document.getElementById('notifyHighPriority').checked = currentConfig.notifications?.high_priority || false;
+            document.getElementById('notifyNegativeSentiment').checked = currentConfig.notifications?.negative_sentiment || false;
+
+            // Departamentos
+            renderDepartments();
+        }
+
+        // Renderizar horários
+        function renderSchedule() {
+            const days = {
+                monday: 'Segunda-feira',
+                tuesday: 'Terça-feira',
+                wednesday: 'Quarta-feira',
+                thursday: 'Quinta-feira',
+                friday: 'Sexta-feira',
+                saturday: 'Sábado',
+                sunday: 'Domingo'
+            };
+
+            const container = document.getElementById('scheduleGrid');
+            container.innerHTML = '';
+
+            Object.entries(days).forEach(([key, label]) => {
+                const schedule = currentConfig.business_hours?.schedule?.[key] || { open: null, close: null };
+                
+                const row = document.createElement('div');
+                row.className = 'schedule-row';
+                row.innerHTML = `
+                    <div class="schedule-day">${label}:</div>
+                    <input type="time" id="schedule_${key}_open" value="${schedule.open || ''}" placeholder="Abertura">
+                    <input type="time" id="schedule_${key}_close" value="${schedule.close || ''}" placeholder="Fechamento">
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Toggle business hours
+        function toggleBusinessHours() {
+            const enabled = document.getElementById('businessHoursEnabled').checked;
+            document.getElementById('businessHoursConfig').style.display = enabled ? 'block' : 'none';
+        }
+
+        // Renderizar departamentos
+        function renderDepartments() {
+            const container = document.getElementById('departmentsList');
+            
+            if (!currentConfig.departments || currentConfig.departments.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #9ca3af;">Nenhum departamento configurado. Clique em "Adicionar Departamento" para criar um.</p>';
+                return;
+            }
+
+            container.innerHTML = currentConfig.departments.map(dept => `
+                <div class="department-item">
+                    <div class="department-header">
+                        <span class="department-name">${dept.name}</span>
+                        <button class="btn btn-danger" onclick="removeDepartment(${dept.id})">
+                            🗑️ Remover
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" value="${dept.name}" onchange="updateDepartmentField(${dept.id}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Palavras-chave (separadas por vírgula):</label>
+                        <input type="text" value="${dept.keywords.join(', ')}" onchange="updateDepartmentKeywords(${dept.id}, this.value)">
+                        <small>Palavras que ativam este departamento automaticamente</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem ao Transferir:</label>
+                        <textarea onchange="updateDepartmentField(${dept.id}, 'transfer_message', this.value)">${dept.transfer_message || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem na Fila:</label>
+                        <textarea onchange="updateDepartmentField(${dept.id}, 'queue_message', this.value)">${dept.queue_message || ''}</textarea>
+                        <small>Use {position} para mostrar posição na fila</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem Offline:</label>
+                        <textarea onchange="updateDepartmentField(${dept.id}, 'offline_message', this.value)">${dept.offline_message || ''}</textarea>
+                    </div>
+                    <div class="keywords-container">
+                        ${dept.keywords.map(kw => `<span class="keyword-tag">${kw}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // GERENCIAMENTO DE FLUXOS
+        // ============================================
+
+        // Renderizar lista de fluxos
+        function renderFlows() {
+            const container = document.getElementById('flowsList');
+            
+            if (!currentConfig.flows || Object.keys(currentConfig.flows).length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #9ca3af;">Nenhum fluxo configurado. Crie seu primeiro fluxo!</p>';
+                return;
+            }
+
+            container.innerHTML = Object.values(currentConfig.flows).map(flow => `
+                <div class="flow-card" onclick="selectFlow('${flow.id}')">
+                    <div class="flow-header">
+                        <div class="flow-title">
+                            <span>🔄</span>
+                            <span>${flow.name}</span>
+                            <span class="flow-trigger">${flow.trigger}</span>
+                        </div>
+                        <div class="flow-actions">
+                            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;" onclick="event.stopPropagation(); editFlow('${flow.id}')">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn btn-danger" style="padding: 8px 16px; font-size: 13px;" onclick="event.stopPropagation(); deleteFlow('${flow.id}')">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flow-stats">
+                        <span>📝 ${flow.steps.length} steps</span>
+                    </div>
+                    <div class="step-list" id="steps-${flow.id}" style="display: none;">
+                        ${flow.steps.map((step, idx) => `
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div>
+                                        <span class="step-type-badge">${step.type}</span>
+                                        <strong style="margin-left: 10px;">${step.id}</strong>
+                                    </div>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="event.stopPropagation(); editStep('${flow.id}', ${idx})">
+                                            ✏️
+                                        </button>
+                                        <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="event.stopPropagation(); deleteStep('${flow.id}', ${idx})">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="step-message">${(step.message || step.action || 'Ação configurada').substring(0, 100)}...</div>
+                            </div>
+                        `).join('')}
+                        <button class="btn btn-success" style="width: 100%; margin-top: 15px;" onclick="event.stopPropagation(); addStepToFlow('${flow.id}')">
+                            ➕ Adicionar Step
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Selecionar fluxo (expandir/recolher)
+        function selectFlow(flowId) {
+            const stepsDiv = document.getElementById(`steps-${flowId}`);
+            if (stepsDiv) {
+                stepsDiv.style.display = stepsDiv.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // Criar novo fluxo
+        function createNewFlow() {
+            const name = prompt('Nome do novo fluxo:');
+            if (!name) return;
+
+            const description = prompt('Descrição (opcional):');
+            const flowId = name.toLowerCase().replace(/\s+/g, '_') + '_flow';
+
+            if (currentConfig.flows[flowId]) {
+                alert('Já existe um fluxo com esse nome!');
+                return;
+            }
+
+            currentConfig.flows[flowId] = {
+                id: flowId,
+                name: name,
+                description: description || '',
+                trigger: 'custom',
+                steps: []
+            };
+
+            renderFlows();
+            showAlert(`Fluxo "${name}" criado! Adicione steps e salve.`, 'success');
+        }
+
+        // Editar fluxo
+        function editFlow(flowId) {
+            const flow = currentConfig.flows[flowId];
+            if (!flow) return;
+
+            const newName = prompt('Nome do fluxo:', flow.name);
+            if (newName && newName !== flow.name) {
+                flow.name = newName;
+            }
+
+            const newDesc = prompt('Descrição:', flow.description);
+            if (newDesc !== null) {
+                flow.description = newDesc;
+            }
+
+            renderFlows();
+            showAlert('Fluxo atualizado!', 'success');
+        }
+
+        // Deletar fluxo
+        function deleteFlow(flowId) {
+            if (!confirm('Tem certeza que deseja deletar este fluxo?')) return;
+
+            delete currentConfig.flows[flowId];
+            renderFlows();
+            showAlert('Fluxo deletado! Clique em "Salvar Tudo".', 'success');
+        }
+
+        // Adicionar step ao fluxo
+        function addStepToFlow(flowId) {
+            currentFlowId = flowId;
+            currentStepIndex = null;
+            showStepEditor();
+        }
+
+        // Editar step existente
+        function editStep(flowId, stepIndex) {
+            currentFlowId = flowId;
+            currentStepIndex = stepIndex;
+            showStepEditor();
+        }
+
+        // Deletar step
+        function deleteStep(flowId, stepIndex) {
+            if (!confirm('Deletar este step?')) return;
+
+            currentConfig.flows[flowId].steps.splice(stepIndex, 1);
+            renderFlows();
+            showAlert('Step deletado!', 'success');
+        }
+
+        // Mostrar editor de step
+        function showStepEditor() {
+            const flow = currentConfig.flows[currentFlowId];
+            const step = currentStepIndex !== null ? flow.steps[currentStepIndex] : null;
+            const isEdit = !!step;
+
+            let modal = document.getElementById('stepEditorModal');
+            if (!modal) {
+                modal = createStepEditorModal();
+            }
+            modal.classList.add('active');
+
+            // Preencher formulário se for edição
+            if (isEdit) {
+                document.getElementById('stepEditorTitle').textContent = 'Editar Step';
+                document.getElementById('stepType').value = step.type;
+                showStepTypeForm(step.type, step);
+            } else {
+                document.getElementById('stepEditorTitle').textContent = 'Adicionar Step';
+                document.getElementById('stepType').value = 'message';
+                showStepTypeForm('message');
+            }
+        }
+
+        // Criar modal do editor
+        function createStepEditorModal() {
+            const modal = document.createElement('div');
+            modal.id = 'stepEditorModal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="stepEditorTitle">Adicionar Step</h2>
+                        <button class="close-modal" onclick="closeStepEditor()">×</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Step:</label>
+                        <select id="stepType" onchange="showStepTypeForm(this.value)">
+                            <option value="message">💬 Mensagem Simples</option>
+                            <option value="menu">📋 Menu com Opções</option>
+                            <option value="capture_data">📝 Captura de Dados</option>
+                            <option value="quick_reply">⚡ Resposta Rápida</option>
+                            <option value="ai_response">🧠 Resposta com IA</option>
+                            <option value="action">⚙️ Ação/Transferência</option>
+                        </select>
+                    </div>
+
+                    <div id="stepFormContainer"></div>
+
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px;">
+                        <button class="btn" onclick="closeStepEditor()" style="background: #6b7280; color: white;">
+                            Cancelar
+                        </button>
+                        <button class="btn btn-success" onclick="saveStep()">
+                            💾 Salvar Step
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            return modal;
+        }
+
+        // Mostrar formulário baseado no tipo
+        function showStepTypeForm(type, existingData = {}) {
+            const container = document.getElementById('stepFormContainer');
+            
+            const forms = {
+                message: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}" placeholder="Ex: welcome_message">
+                        <small>Identificador único deste step</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem:</label>
+                        <textarea id="stepMessage" placeholder="Digite a mensagem...">${existingData.message || ''}</textarea>
+                        <small>Use {variavel} para inserir dados. Ex: Olá {name}!</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Delay (ms):</label>
+                        <input type="number" id="stepDelay" value="${existingData.delay || 0}" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label>Próximo Step (ID):</label>
+                        <input type="text" id="stepNext" value="${existingData.next || ''}" placeholder="Ex: step_2">
+                    </div>
+                `,
+                
+                menu: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}" placeholder="Ex: main_menu">
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem do Menu:</label>
+                        <textarea id="stepMessage" placeholder="Ex: Escolha uma opção:">${existingData.message || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Opções do Menu:</label>
+                        <div id="menuOptions">
+                            ${(existingData.options || []).map((opt, idx) => `
+                                <div class="menu-option-item">
+                                    <div class="menu-option-header">
+                                        <strong>Opção ${idx + 1}</strong>
+                                        <button class="btn btn-danger" type="button" style="padding: 4px 8px; font-size: 12px;" onclick="this.parentElement.parentElement.remove()">🗑️</button>
+                                    </div>
+                                    <input type="text" placeholder="ID (Ex: 1)" value="${opt.id}" id="menuOpt${idx}Id" style="margin-bottom: 8px;">
+                                    <input type="text" placeholder="Label (Ex: 💰 Vendas)" value="${opt.label}" id="menuOpt${idx}Label" style="margin-bottom: 8px;">
+                                    <select id="menuOpt${idx}Action" style="margin-bottom: 8px;">
+                                        <option value="goto" ${opt.action === 'goto' ? 'selected' : ''}>Ir para outro fluxo</option>
+                                        <option value="transfer_human" ${opt.action === 'transfer_human' ? 'selected' : ''}>Transferir para humano</option>
+                                        <option value="transfer_department" ${opt.action === 'transfer_department' ? 'selected' : ''}>Transferir departamento</option>
+                                    </select>
+                                    <input type="text" placeholder="Target (ID fluxo ou dept)" value="${opt.target || ''}" id="menuOpt${idx}Target">
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-success" type="button" onclick="addMenuOption()">➕ Adicionar Opção</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem de Erro:</label>
+                        <input type="text" id="stepRetryMessage" value="${existingData.retry_message || ''}" placeholder="Opção inválida!">
+                    </div>
+                `,
+                
+                capture_data: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}" placeholder="Ex: capture_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Campo a Capturar:</label>
+                        <input type="text" id="stepField" value="${existingData.field || ''}" placeholder="Ex: name, email, cpf">
+                    </div>
+                    <div class="form-group">
+                        <label>Pergunta:</label>
+                        <textarea id="stepMessage" placeholder="Ex: Qual é o seu nome?">${existingData.message || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Validação:</label>
+                        <select id="stepValidation">
+                            <option value="text" ${existingData.validation === 'text' ? 'selected' : ''}>Texto</option>
+                            <option value="email" ${existingData.validation === 'email' ? 'selected' : ''}>E-mail</option>
+                            <option value="phone" ${existingData.validation === 'phone' ? 'selected' : ''}>Telefone</option>
+                            <option value="cpf" ${existingData.validation === 'cpf' ? 'selected' : ''}>CPF</option>
+                            <option value="cnpj" ${existingData.validation === 'cnpj' ? 'selected' : ''}>CNPJ</option>
+                            <option value="cpf_cnpj" ${existingData.validation === 'cpf_cnpj' ? 'selected' : ''}>CPF ou CNPJ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Salvar em:</label>
+                        <input type="text" id="stepSaveTo" value="${existingData.save_to || ''}" placeholder="user_context.name">
+                    </div>
+                    <div class="form-group">
+                        <label>Próximo Step:</label>
+                        <input type="text" id="stepNext" value="${existingData.next || ''}">
+                    </div>
+                `,
+                
+                action: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}" placeholder="Ex: transfer_sales">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Ação:</label>
+                        <select id="stepAction">
+                            <option value="transfer_department" ${existingData.action === 'transfer_department' ? 'selected' : ''}>Transferir Departamento</option>
+                            <option value="transfer_human" ${existingData.action === 'transfer_human' ? 'selected' : ''}>Transferir Humano</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ID do Departamento:</label>
+                        <input type="number" id="stepDepartmentId" value="${existingData.department_id || ''}">
+                    </div>
+                `,
+
+                quick_reply: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem:</label>
+                        <textarea id="stepMessage">${existingData.message || ''}</textarea>
+                    </div>
+                `,
+
+                ai_response: `
+                    <div class="form-group">
+                        <label>ID do Step:</label>
+                        <input type="text" id="stepId" value="${existingData.id || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem Inicial:</label>
+                        <textarea id="stepMessage">${existingData.message || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Confiança Mínima:</label>
+                        <input type="number" id="stepConfidenceThreshold" value="${existingData.confidence_threshold || 0.7}" step="0.05" min="0" max="1">
+                    </div>
+                `
+            };
+
+            container.innerHTML = forms[type] || '<p>Tipo não suportado</p>';
+            menuOptionCount = (existingData.options || []).length;
+        }
+
+        // Adicionar opção ao menu
+        function addMenuOption() {
+            const container = document.getElementById('menuOptions');
+            const idx = menuOptionCount++;
+            
+            const div = document.createElement('div');
+            div.className = 'menu-option-item';
+            div.innerHTML = `
+                <div class="menu-option-header">
+                    <strong>Opção ${idx + 1}</strong>
+                    <button class="btn btn-danger" type="button" style="padding: 4px 8px; font-size: 12px;" onclick="this.parentElement.parentElement.remove()">🗑️</button>
+                </div>
+                <input type="text" placeholder="ID (Ex: 1)" id="menuOpt${idx}Id" style="margin-bottom: 8px;">
+                <input type="text" placeholder="Label" id="menuOpt${idx}Label" style="margin-bottom: 8px;">
+                <select id="menuOpt${idx}Action" style="margin-bottom: 8px;">
+                    <option value="goto">Ir para outro fluxo</option>
+                    <option value="transfer_human">Transferir para humano</option>
+                    <option value="transfer_department">Transferir departamento</option>
+                </select>
+                <input type="text" placeholder="Target" id="menuOpt${idx}Target">
+            `;
+            container.appendChild(div);
+        }
+
+        // Salvar step
+        function saveStep() {
+            const flow = currentConfig.flows[currentFlowId];
+            const type = document.getElementById('stepType').value;
+            const stepId = document.getElementById('stepId').value;
+
+            if (!stepId) {
+                alert('ID do step é obrigatório!');
+                return;
+            }
+
+            let stepData = { id: stepId, type: type };
+
+            switch(type) {
+                case 'message':
+                    stepData.message = document.getElementById('stepMessage').value;
+                    stepData.delay = parseInt(document.getElementById('stepDelay').value) || 0;
+                    stepData.next = document.getElementById('stepNext').value || null;
+                    break;
+
+                case 'menu':
+                    stepData.message = document.getElementById('stepMessage').value;
+                    stepData.validation = 'option';
+                    stepData.retry_message = document.getElementById('stepRetryMessage').value;
+                    
+                    const menuOptions = [];
+                    let optIdx = 0;
+                    while(document.getElementById(`menuOpt${optIdx}Id`)) {
+                        menuOptions.push({
+                            id: document.getElementById(`menuOpt${optIdx}Id`).value,
+                            label: document.getElementById(`menuOpt${optIdx}Label`).value,
+                            action: document.getElementById(`menuOpt${optIdx}Action`).value,
+                            target: document.getElementById(`menuOpt${optIdx}Target`).value || null
+                        });
+                        optIdx++;
+                    }
+                    stepData.options = menuOptions;
+                    break;
+
+                case 'capture_data':
+                    stepData.field = document.getElementById('stepField').value;
+                    stepData.message = document.getElementById('stepMessage').value;
+                    stepData.validation = document.getElementById('stepValidation').value;
+                    stepData.save_to = document.getElementById('stepSaveTo').value;
+                    stepData.next = document.getElementById('stepNext').value || null;
+                    break;
+
+                case 'action':
+                    stepData.action = document.getElementById('stepAction').value;
+                    const deptId = document.getElementById('stepDepartmentId').value;
+                    if (deptId) stepData.department_id = parseInt(deptId);
+                    break;
+
+                case 'quick_reply':
+                case 'ai_response':
+                    stepData.message = document.getElementById('stepMessage').value;
+                    break;
+            }
+
+            if (currentStepIndex !== null) {
+                flow.steps[currentStepIndex] = stepData;
+                showAlert('Step atualizado!', 'success');
+            } else {
+                flow.steps.push(stepData);
+                showAlert('Step adicionado!', 'success');
+            }
+
+            closeStepEditor();
+            renderFlows();
+        }
+
+        // Fechar editor
+        function closeStepEditor() {
+            const modal = document.getElementById('stepEditorModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // ============================================
+        // OUTRAS FUNÇÕES
+        // ============================================
+
+        // Selecionar modo
+        function selectMode(mode) {
+            document.getElementById('modeAtendimento').classList.remove('active');
+            document.getElementById('modeTriagem').classList.remove('active');
+            document.getElementById('mode' + capitalizeFirstLetter(mode)).classList.add('active');
+            currentConfig.mode = mode;
+        }
+
+        // Adicionar departamento
+        function addDepartment() {
+            const name = prompt('Nome do departamento:');
+            if (!name) return;
+
+            const keywords = prompt('Palavras-chave (separadas por vírgula):');
+            const transferMsg = prompt('Mensagem ao transferir:') || 'Conectando você...';
+
+            const newDept = {
+                id: (currentConfig.departments.length > 0 ? Math.max(...currentConfig.departments.map(d => d.id)) : 0) + 1,
+                name: name,
+                keywords: keywords ? keywords.split(',').map(k => k.trim()) : [],
+                transfer_number: null,
+                transfer_message: transferMsg,
+                queue_message: 'Aguarde. Posição: {position}',
+                offline_message: 'Departamento offline.'
+            };
+
+            currentConfig.departments.push(newDept);
+            renderDepartments();
+            showAlert('Departamento adicionado!', 'success');
+        }
+
+        function updateDepartmentField(deptId, field, value) {
+            const dept = currentConfig.departments.find(d => d.id === deptId);
+            if (dept) dept[field] = value;
+        }
+
+        function updateDepartmentKeywords(deptId, value) {
+            const dept = currentConfig.departments.find(d => d.id === deptId);
+            if (dept) {
+                dept.keywords = value.split(',').map(k => k.trim()).filter(k => k);
+                renderDepartments();
+            }
+        }
+
+        function removeDepartment(deptId) {
+            if (!confirm('Remover este departamento?')) return;
+            currentConfig.departments = currentConfig.departments.filter(d => d.id !== deptId);
+            renderDepartments();
+            showAlert('Departamento removido!', 'success');
+        }
+
+        // Salvar todas as configurações
+        async function saveAllConfig() {
+            try {
+                showAlert('Salvando...', 'info');
+
+                currentConfig.botName = document.getElementById('botName').value;
+                currentConfig.greeting.message = document.getElementById('greetingMessage').value;
+                currentConfig.greeting.first_time_message = document.getElementById('firstTimeMessage').value;
+                currentConfig.greeting.show_menu = document.getElementById('showMenu').checked;
+
+                currentConfig.fallback.message = document.getElementById('fallbackMessage').value;
+                currentConfig.fallback.retry_limit = parseInt(document.getElementById('retryLimit').value);
+                currentConfig.fallback.transfer_after_limit = document.getElementById('transferAfterLimit').checked;
+                currentConfig.fallback.transfer_message = document.getElementById('transferMessage').value;
+
+                currentConfig.ai.enabled = document.getElementById('aiEnabled').checked;
+                currentConfig.ai.learning_mode = document.getElementById('learningMode').checked;
+                currentConfig.ai.auto_improve = document.getElementById('autoImprove').checked;
+                currentConfig.ai.use_in_flows = document.getElementById('useInFlows').checked;
+                currentConfig.ai.min_confidence = parseFloat(document.getElementById('minConfidence').value);
+                currentConfig.ai.max_context_messages = parseInt(document.getElementById('maxContextMessages').value);
+
+                currentConfig.security.max_messages_per_minute = parseInt(document.getElementById('maxMessagesPerMinute').value);
+                currentConfig.security.session_timeout = parseInt(document.getElementById('sessionTimeout').value);
+                currentConfig.security.max_retries_per_step = parseInt(document.getElementById('maxRetriesPerStep').value);
+                currentConfig.security.block_spam = document.getElementById('blockSpam').checked;
+                currentConfig.security.encrypt_database = document.getElementById('encryptDatabase').checked;
+
+                currentConfig.business_hours.enabled = document.getElementById('businessHoursEnabled').checked;
+                currentConfig.business_hours.timezone = document.getElementById('timezone').value;
+                currentConfig.business_hours.offline_message = document.getElementById('offlineMessage').value;
+                currentConfig.business_hours.auto_reply_offline = document.getElementById('autoReplyOffline').checked;
+
+                const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+                days.forEach(day => {
+                    const open = document.getElementById(`schedule_${day}_open`).value;
+                    const close = document.getElementById(`schedule_${day}_close`).value;
+                    currentConfig.business_hours.schedule[day] = { open: open || null, close: close || null };
+                });
+
+                currentConfig.notifications.new_lead = document.getElementById('notifyNewLead').checked;
+                currentConfig.notifications.transfer_to_human = document.getElementById('notifyTransferHuman').checked;
+                currentConfig.notifications.high_priority = document.getElementById('notifyHighPriority').checked;
+                currentConfig.notifications.negative_sentiment = document.getElementById('notifyNegativeSentiment').checked;
+
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentConfig)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('✅ Salvo! Hot Reload aplicado.', 'success');
+                    loadBackups();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showAlert('❌ Erro: ' + error.message, 'error');
+            }
+        }
+
+        async function loadBackups() {
+            try {
+                const response = await fetch('/api/config/backups');
+                const data = await response.json();
+                const container = document.getElementById('backupsList');
+
+                if (data.success && data.data.length > 0) {
+                    container.innerHTML = data.data.map(backup => `
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <div class="backup-name">📦 ${backup.filename}</div>
+                                <div class="backup-date">${new Date(backup.created).toLocaleString('pt-BR')}</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="restoreBackup('${backup.filename}')">
+                                🔄 Restaurar
+                            </button>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="text-align: center; color: #9ca3af;">Nenhum backup</p>';
+                }
+            } catch (error) {
+                console.error('Error loading backups:', error);
+            }
+        }
+
+        async function createBackup() {
+            showAlert('Criando backup...', 'info');
+            await saveAllConfig();
+        }
+
+        async function restoreBackup(filename) {
+            if (!confirm(`Restaurar ${filename}?`)) return;
+
+            try {
+                showAlert('Restaurando...', 'info');
+                const response = await fetch('/api/config/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('✅ Restaurado!', 'success');
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showAlert('❌ Erro: ' + error.message, 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'success' ? 'alert-success' : type === 'error' ? 'alert-error' : 'alert-info';
+            
+            alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+
+            if (type !== 'info') {
+                setTimeout(() => { alertContainer.innerHTML = ''; }, 5000);
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        socket.on('config-updated', (config) => {
+            showAlert('⚡ Config atualizada em tempo real!', 'info');
+        });
+    </script>
+</body>
+</html>

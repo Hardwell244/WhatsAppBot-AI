@@ -1,0 +1,449 @@
+{
+  "botName": "BLACKCORE Assistant",
+  "version": "2.0.0",
+  "mode": "atendimento",
+  
+  "modes": {
+    "atendimento": {
+      "enabled": true,
+      "description": "Atendimento completo com fluxos personalizados",
+      "flowId": "main_flow",
+      "features": {
+        "ai_responses": true,
+        "human_handoff": true,
+        "learning": true,
+        "sentiment_analysis": true,
+        "data_capture": true
+      }
+    },
+    "triagem": {
+      "enabled": true,
+      "description": "Triagem com menu e direcionamento",
+      "flowId": "triage_flow",
+      "features": {
+        "department_routing": true,
+        "menu_system": true,
+        "queue_system": true,
+        "quick_replies": true
+      }
+    }
+  },
+
+  "flows": {
+    "main_flow": {
+      "id": "main_flow",
+      "name": "Fluxo Principal - Atendimento Completo",
+      "trigger": "start",
+      "steps": [
+        {
+          "id": "step_1",
+          "type": "message",
+          "message": "Olá! Bem-vindo à *BLACKCORE* 👋\n\nSou seu assistente virtual e vou te ajudar hoje!",
+          "delay": 1000,
+          "next": "step_2"
+        },
+        {
+          "id": "step_2",
+          "type": "capture_data",
+          "field": "name",
+          "message": "Para começar, qual é o seu nome? 😊",
+          "validation": "text",
+          "required": true,
+          "save_to": "user_context.name",
+          "next": "step_3"
+        },
+        {
+          "id": "step_3",
+          "type": "message",
+          "message": "Prazer em conhecer você, {name}! 🎉",
+          "delay": 1000,
+          "next": "step_4"
+        },
+        {
+          "id": "step_4",
+          "type": "menu",
+          "message": "Como posso te ajudar hoje? Escolha uma opção:",
+          "options": [
+            {
+              "id": "1",
+              "label": "💰 Vendas e Orçamentos",
+              "action": "goto",
+              "target": "sales_flow"
+            },
+            {
+              "id": "2",
+              "label": "🛠️ Suporte Técnico",
+              "action": "goto",
+              "target": "support_flow"
+            },
+            {
+              "id": "3",
+              "label": "💳 Financeiro",
+              "action": "goto",
+              "target": "financial_flow"
+            },
+            {
+              "id": "4",
+              "label": "👤 Falar com Atendente",
+              "action": "transfer_human",
+              "target": null
+            }
+          ],
+          "validation": "option",
+          "retry_message": "Por favor, escolha uma opção válida (1, 2, 3 ou 4)",
+          "max_retries": 3
+        }
+      ]
+    },
+
+    "sales_flow": {
+      "id": "sales_flow",
+      "name": "Fluxo de Vendas",
+      "trigger": "menu_option",
+      "steps": [
+        {
+          "id": "sales_1",
+          "type": "message",
+          "message": "Ótimo! Vou te conectar com nossa equipe de vendas 💼",
+          "delay": 1000,
+          "next": "sales_2"
+        },
+        {
+          "id": "sales_2",
+          "type": "capture_data",
+          "field": "email",
+          "message": "Antes de transferir, qual é o seu melhor e-mail? 📧",
+          "validation": "email",
+          "required": true,
+          "save_to": "user_context.email",
+          "next": "sales_3"
+        },
+        {
+          "id": "sales_3",
+          "type": "capture_data",
+          "field": "interest",
+          "message": "Perfeito! Me conta: qual produto/serviço você tem interesse?",
+          "validation": "text",
+          "required": false,
+          "save_to": "user_context.interest",
+          "next": "sales_4"
+        },
+        {
+          "id": "sales_4",
+          "type": "message",
+          "message": "Excelente! Já estou conectando você com um especialista em vendas...",
+          "delay": 1500,
+          "next": "sales_5"
+        },
+        {
+          "id": "sales_5",
+          "type": "action",
+          "action": "transfer_department",
+          "department_id": 1,
+          "notify_human": true,
+          "context_message": "Lead qualificado: {name} ({email}) - Interesse em: {interest}"
+        }
+      ]
+    },
+
+    "support_flow": {
+      "id": "support_flow",
+      "name": "Fluxo de Suporte",
+      "trigger": "menu_option",
+      "steps": [
+        {
+          "id": "support_1",
+          "type": "message",
+          "message": "Vou te ajudar com o suporte técnico! 🛠️",
+          "delay": 1000,
+          "next": "support_2"
+        },
+        {
+          "id": "support_2",
+          "type": "menu",
+          "message": "Qual tipo de problema você está enfrentando?",
+          "options": [
+            {
+              "id": "1",
+              "label": "🐛 Bug / Erro no sistema",
+              "action": "goto",
+              "target": "support_bug"
+            },
+            {
+              "id": "2",
+              "label": "❓ Dúvida sobre funcionalidade",
+              "action": "goto",
+              "target": "support_question"
+            },
+            {
+              "id": "3",
+              "label": "🔑 Problema de acesso/login",
+              "action": "goto",
+              "target": "support_access"
+            }
+          ],
+          "validation": "option"
+        },
+        {
+          "id": "support_bug",
+          "type": "capture_data",
+          "field": "bug_description",
+          "message": "Por favor, descreva o erro detalhadamente:",
+          "validation": "text",
+          "required": true,
+          "save_to": "ticket.description",
+          "next": "support_transfer"
+        },
+        {
+          "id": "support_question",
+          "type": "message",
+          "message": "Vou consultar nossa base de conhecimento... 🔍",
+          "delay": 2000,
+          "next": "support_ai"
+        },
+        {
+          "id": "support_ai",
+          "type": "ai_response",
+          "message": "Com base na sua dúvida, posso te ajudar!",
+          "confidence_threshold": 0.7,
+          "fallback": "support_transfer"
+        },
+        {
+          "id": "support_access",
+          "type": "message",
+          "message": "Problemas de acesso são resolvidos rapidamente!",
+          "delay": 1000,
+          "next": "support_transfer"
+        },
+        {
+          "id": "support_transfer",
+          "type": "action",
+          "action": "transfer_department",
+          "department_id": 2,
+          "notify_human": true,
+          "context_message": "Ticket de suporte: {name} - {bug_description}"
+        }
+      ]
+    },
+
+    "financial_flow": {
+      "id": "financial_flow",
+      "name": "Fluxo Financeiro",
+      "trigger": "menu_option",
+      "steps": [
+        {
+          "id": "fin_1",
+          "type": "message",
+          "message": "Vou te ajudar com questões financeiras! 💳",
+          "delay": 1000,
+          "next": "fin_2"
+        },
+        {
+          "id": "fin_2",
+          "type": "menu",
+          "message": "O que você precisa?",
+          "options": [
+            {
+              "id": "1",
+              "label": "📄 2ª via de boleto",
+              "action": "goto",
+              "target": "fin_boleto"
+            },
+            {
+              "id": "2",
+              "label": "🧾 Nota fiscal",
+              "action": "goto",
+              "target": "fin_nf"
+            },
+            {
+              "id": "3",
+              "label": "❌ Cancelamento",
+              "action": "goto",
+              "target": "fin_cancel"
+            }
+          ],
+          "validation": "option"
+        },
+        {
+          "id": "fin_boleto",
+          "type": "capture_data",
+          "field": "cpf_cnpj",
+          "message": "Para enviar a 2ª via, preciso do seu CPF ou CNPJ:",
+          "validation": "cpf_cnpj",
+          "required": true,
+          "save_to": "user_context.document",
+          "next": "fin_boleto_send"
+        },
+        {
+          "id": "fin_boleto_send",
+          "type": "action",
+          "action": "generate_boleto",
+          "message": "Gerando sua 2ª via de boleto... ⏳",
+          "success_message": "Boleto enviado! Verifique seu e-mail ou WhatsApp 📧",
+          "next": "fin_end"
+        },
+        {
+          "id": "fin_nf",
+          "type": "action",
+          "action": "transfer_department",
+          "department_id": 3,
+          "message": "Vou transferir você para o financeiro enviar a nota fiscal!"
+        },
+        {
+          "id": "fin_cancel",
+          "type": "message",
+          "message": "Sinto muito que queira cancelar 😢",
+          "delay": 1500,
+          "next": "fin_cancel_confirm"
+        },
+        {
+          "id": "fin_cancel_confirm",
+          "type": "quick_reply",
+          "message": "Tem certeza que deseja cancelar?",
+          "options": [
+            {
+              "id": "yes",
+              "label": "Sim, quero cancelar",
+              "next": "fin_cancel_transfer"
+            },
+            {
+              "id": "no",
+              "label": "Não, foi engano",
+              "next": "main_flow"
+            }
+          ]
+        },
+        {
+          "id": "fin_cancel_transfer",
+          "type": "action",
+          "action": "transfer_department",
+          "department_id": 3,
+          "notify_human": true,
+          "priority": "high",
+          "context_message": "🚨 CANCELAMENTO: {name} ({phone})"
+        },
+        {
+          "id": "fin_end",
+          "type": "message",
+          "message": "Pronto! Algo mais que posso ajudar?",
+          "delay": 1000,
+          "next": "main_flow"
+        }
+      ]
+    },
+
+    "triage_flow": {
+      "id": "triage_flow",
+      "name": "Fluxo de Triagem",
+      "trigger": "start",
+      "steps": [
+        {
+          "id": "triage_1",
+          "type": "message",
+          "message": "Olá! Bem-vindo ao atendimento da *BLACKCORE* 👋\n\nVamos te direcionar para o setor correto!",
+          "delay": 1500,
+          "next": "triage_2"
+        },
+        {
+          "id": "triage_2",
+          "type": "menu",
+          "message": "*Escolha uma opção:*\n\n1️⃣ - Vendas e Orçamentos\n2️⃣ - Suporte Técnico\n3️⃣ - Financeiro\n4️⃣ - Falar com Atendente\n0️⃣ - Voltar ao Menu",
+          "options": [
+            {"id": "1", "label": "Vendas", "action": "transfer_department", "target": 1},
+            {"id": "2", "label": "Suporte", "action": "transfer_department", "target": 2},
+            {"id": "3", "label": "Financeiro", "action": "transfer_department", "target": 3},
+            {"id": "4", "label": "Atendente", "action": "transfer_human", "target": null},
+            {"id": "0", "label": "Menu", "action": "goto", "target": "triage_2"}
+          ],
+          "validation": "option",
+          "retry_message": "❌ Opção inválida! Digite um número de 0 a 4.",
+          "max_retries": 3
+        }
+      ]
+    }
+  },
+
+  "departments": [
+    {
+      "id": 1,
+      "name": "Vendas",
+      "keywords": ["preço", "comprar", "valor", "orçamento", "produto", "vender"],
+      "transfer_number": null,
+      "transfer_message": "🔄 Transferindo você para *Vendas*...\n\nUm consultor vai te atender em instantes!",
+      "queue_message": "⏳ Aguarde na fila. Sua posição: {position}",
+      "offline_message": "Nosso time de vendas está offline. Horário: Seg-Sex, 9h-18h"
+    },
+    {
+      "id": 2,
+      "name": "Suporte Técnico",
+      "keywords": ["problema", "erro", "ajuda", "não funciona", "bug", "suporte"],
+      "transfer_number": null,
+      "transfer_message": "🔄 Transferindo para *Suporte Técnico*...\n\nNosso time vai resolver seu problema!",
+      "queue_message": "⏳ Fila de suporte. Posição: {position}",
+      "offline_message": "Suporte offline. Retornamos em breve!"
+    },
+    {
+      "id": 3,
+      "name": "Financeiro",
+      "keywords": ["boleto", "pagamento", "fatura", "cobrança", "nota fiscal", "cancelar"],
+      "transfer_number": null,
+      "transfer_message": "🔄 Conectando com *Financeiro*...",
+      "queue_message": "⏳ Aguarde. Posição na fila: {position}",
+      "offline_message": "Financeiro offline. Horário: Seg-Sex, 9h-18h"
+    }
+  ],
+
+  "greeting": {
+    "enabled": true,
+    "message": "Olá! Sou o assistente virtual da *BLACKCORE*. Como posso ajudar você hoje?",
+    "show_menu": true,
+    "first_time_message": "Seja bem-vindo! É seu primeiro contato conosco! 🎉"
+  },
+
+  "fallback": {
+    "message": "Desculpe, não entendi. Você pode reformular?",
+    "retry_limit": 3,
+    "transfer_after_limit": true,
+    "transfer_message": "Vou te conectar com um atendente humano para te ajudar melhor! 🤝"
+  },
+
+  "ai": {
+    "enabled": true,
+    "min_confidence": 0.75,
+    "learning_mode": true,
+    "auto_improve": true,
+    "max_context_messages": 10,
+    "use_in_flows": true
+  },
+
+  "security": {
+    "max_messages_per_minute": 30,
+    "block_spam": true,
+    "encrypt_database": true,
+    "session_timeout": 1800000,
+    "max_retries_per_step": 3
+  },
+
+  "business_hours": {
+    "enabled": true,
+    "timezone": "America/Sao_Paulo",
+    "schedule": {
+      "monday": { "open": "09:00", "close": "18:00" },
+      "tuesday": { "open": "09:00", "close": "18:00" },
+      "wednesday": { "open": "09:00", "close": "18:00" },
+      "thursday": { "open": "09:00", "close": "18:00" },
+      "friday": { "open": "09:00", "close": "18:00" },
+      "saturday": { "open": null, "close": null },
+      "sunday": { "open": null, "close": null }
+    },
+    "offline_message": "🌙 Estamos fora do horário de atendimento!\n\nRetornamos: Segunda-Feira às 9h\n\nDeixe sua mensagem que respondemos assim que possível! 📩",
+    "auto_reply_offline": true
+  },
+
+  "notifications": {
+    "new_lead": true,
+    "transfer_to_human": true,
+    "high_priority": true,
+    "negative_sentiment": true
+  }
+}
