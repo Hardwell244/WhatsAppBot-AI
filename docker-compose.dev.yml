@@ -1,0 +1,59 @@
+version: '3.8'
+
+# ============================================
+# WHATSAPP BOT AI - DESENVOLVIMENTO
+# Docker Compose para Ambiente de Dev
+# ============================================
+
+services:
+  # ============================================
+  # Aplicação em Modo Desenvolvimento
+  # ============================================
+  whatsapp-bot-dev:
+    container_name: whatsapp-bot-ai-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        NODE_ENV: development
+    image: whatsapp-bot-ai:dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "9229:9229"  # Debug port
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DEBUG_MODE=true
+      - LOG_LEVEL=debug
+    volumes:
+      # Hot reload - montar código fonte
+      - .:/app
+      - /app/node_modules  # Usar node_modules do container
+      - ./database:/app/database
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+      - ./config:/app/config
+    networks:
+      - bot-network-dev
+    command: npm run dev
+    stdin_open: true
+    tty: true
+
+  # ============================================
+  # Redis para Desenvolvimento
+  # ============================================
+  redis-dev:
+    container_name: whatsapp-bot-redis-dev
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - bot-network-dev
+
+networks:
+  bot-network-dev:
+    driver: bridge
+    name: whatsapp-bot-network-dev

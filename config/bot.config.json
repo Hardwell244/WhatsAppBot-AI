@@ -1,5 +1,5 @@
 {
-  "botName": "BLACKCORE Assistant",
+  "botName": "Octávio Augusto Assistant",
   "version": "2.0.0",
   "mode": "atendimento",
   
@@ -38,7 +38,7 @@
         {
           "id": "step_1",
           "type": "message",
-          "message": "Olá! Bem-vindo à *BLACKCORE* 👋\n\nSou seu assistente virtual e vou te ajudar hoje!",
+          "message": "Olá! Bem-vindo à *Octávio Augusto* 👋\n\nSou seu assistente virtual e vou te ajudar hoje!",
           "delay": 1000,
           "next": "step_2"
         },
@@ -340,7 +340,7 @@
         {
           "id": "triage_1",
           "type": "message",
-          "message": "Olá! Bem-vindo ao atendimento da *BLACKCORE* 👋\n\nVamos te direcionar para o setor correto!",
+          "message": "Olá! Bem-vindo ao atendimento da *Octávio Augusto* 👋\n\nVamos te direcionar para o setor correto!",
           "delay": 1500,
           "next": "triage_2"
         },
@@ -395,7 +395,7 @@
 
   "greeting": {
     "enabled": true,
-    "message": "Olá! Sou o assistente virtual da *BLACKCORE*. Como posso ajudar você hoje?",
+    "message": "Olá! Sou o assistente virtual da *Octávio Augusto*. Como posso ajudar você hoje?",
     "show_menu": true,
     "first_time_message": "Seja bem-vindo! É seu primeiro contato conosco! 🎉"
   },

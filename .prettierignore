@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+out/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Database
+database/*.db
+*.sqlite
+
+# Sessions
+sessions/
+.wwebjs_auth/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Config
+config/backups/
+
+# OS
+.DS_Store
+Thumbs.db

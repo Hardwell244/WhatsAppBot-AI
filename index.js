@@ -1,8 +1,8 @@
 /**
  * ╔═══════════════════════════════════════════════════════════╗
- * ║   WHATSAPP BOT AI - BLACKCORE v1.0 - ENTERPRISE EDITION  ║
- * ║   Sistema Profissional de Atendimento Inteligente        ║
- * ║   Desenvolvido por: Octávio - BLACKCORE                  ║
+ * ║   WHATSAPP BOT AI - v1.0 - VERSÃO PROFISSIONAL             ║
+ * ║   Sistema Profissional de Atendimento Inteligente         ║
+ * ║   Desenvolvido por: Octávio - Octávio Augusto                   ║
  * ╚═══════════════════════════════════════════════════════════╝
  */
 
@@ -33,7 +33,7 @@ class BotServer {
                 methods: ["GET", "POST"]
             }
         });
-        
+
         this.PORT = process.env.PORT || 3000;
         this.whatsappBot = null;
         this.config = null;
@@ -53,7 +53,7 @@ class BotServer {
     // ============================================
     // INICIALIZAÇÃO DO SERVIDOR
     // ============================================
-    
+
     async init() {
         try {
             this.loadConfiguration();
@@ -73,11 +73,11 @@ class BotServer {
         try {
             const configPath = path.join(__dirname, 'config', 'bot.config.json');
             this.config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-            
+
             // Criar ConfigManager
             const ConfigManager = require('./config/config-manager');
             this.configManager = ConfigManager;
-            
+
             logger.info('✅ Configuration loaded successfully');
         } catch (error) {
             logger.error('Error loading configuration:', error);
@@ -88,7 +88,7 @@ class BotServer {
     // ============================================
     // MIDDLEWARE
     // ============================================
-    
+
     setupMiddleware() {
         // Body parser
         this.app.use(express.json({ limit: '10mb' }));
@@ -99,7 +99,7 @@ class BotServer {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
             res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            
+
             if (req.method === 'OPTIONS') {
                 return res.sendStatus(200);
             }
@@ -110,26 +110,26 @@ class BotServer {
         this.app.use((req, res, next) => {
             const start = Date.now();
             this.metrics.requests++;
-            
+
             res.on('finish', () => {
                 const duration = Date.now() - start;
                 logger.info(`${req.method} ${req.path} ${res.statusCode} ${duration}ms`);
             });
-            
+
             next();
         });
 
         // Rate limiting básico
         this.app.use((req, res, next) => {
             const ip = req.ip || req.connection.remoteAddress;
-            
+
             if (!security.checkRateLimit(ip, 100)) { // 100 req/min por IP
                 return res.status(429).json({
                     success: false,
                     error: 'Rate limit exceeded'
                 });
             }
-            
+
             next();
         });
 
@@ -142,7 +142,7 @@ class BotServer {
     // ============================================
     // ROTAS DA API
     // ============================================
-    
+
     setupRoutes() {
         const router = express.Router();
 
@@ -150,7 +150,7 @@ class BotServer {
         router.get('/health', (req, res) => {
             const uptime = Date.now() - this.startTime;
             const botStatus = this.whatsappBot ? this.whatsappBot.getStatus() : { isReady: false };
-            
+
             res.json({
                 success: true,
                 status: 'online',
@@ -169,7 +169,7 @@ class BotServer {
                 const dbStats = database.getStats();
                 const aiStats = AIBrain.getStats();
                 const botStatus = this.whatsappBot ? this.whatsappBot.getStatus() : { isReady: false };
-                
+
                 res.json({
                     success: true,
                     data: {
@@ -197,13 +197,13 @@ class BotServer {
             try {
                 const limit = parseInt(req.query.limit) || 50;
                 const offset = parseInt(req.query.offset) || 0;
-                
+
                 const conversations = database.db.prepare(
                     'SELECT * FROM conversations ORDER BY timestamp DESC LIMIT ? OFFSET ?'
                 ).all(limit, offset);
-                
+
                 const total = database.db.prepare('SELECT COUNT(*) as count FROM conversations').get();
-                
+
                 res.json({
                     success: true,
                     data: conversations,
@@ -225,10 +225,10 @@ class BotServer {
             try {
                 const phone = req.params.phone;
                 const limit = parseInt(req.query.limit) || 50;
-                
+
                 const conversations = database.getConversationHistory(phone, limit);
                 const userContext = database.getUserContext(phone);
-                
+
                 res.json({
                     success: true,
                     data: {
@@ -247,7 +247,7 @@ class BotServer {
         router.get('/training', (req, res) => {
             try {
                 const trainingData = database.getTrainingData();
-                
+
                 res.json({
                     success: true,
                     data: trainingData,
@@ -263,19 +263,19 @@ class BotServer {
         router.post('/training', async (req, res) => {
             try {
                 const { input, output } = req.body;
-                
+
                 if (!input || !output) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        error: 'Input and output required' 
+                    return res.status(400).json({
+                        success: false,
+                        error: 'Input and output required'
                     });
                 }
-                
+
                 await AIBrain.learn(input, output, true);
-                
+
                 // Notificar clientes conectados
                 this.io.emit('training-updated', { input, output });
-                
+
                 res.json({
                     success: true,
                     message: 'Training data added successfully'
@@ -290,10 +290,10 @@ class BotServer {
         router.delete('/training/:id', async (req, res) => {
             try {
                 const id = parseInt(req.params.id);
-                
+
                 database.db.prepare('DELETE FROM ai_training WHERE id = ?').run(id);
                 AIBrain.loadTrainingData();
-                
+
                 res.json({
                     success: true,
                     message: 'Training data deleted'
@@ -320,21 +320,21 @@ class BotServer {
         router.post('/config', async (req, res) => {
     try {
         const result = this.configManager.saveConfig(req.body);
-        
+
         if (result.success) {
             // Recarregar configuração do bot (HOT RELOAD!)
             this.config = this.configManager.getConfig();
-            
+
             // 🔥 ATUALIZAR BOT SEM REINICIAR
             if (this.whatsappBot && this.whatsappBot.isReady) {
                 this.whatsappBot.reloadConfig(this.config);
                 logger.info('🔥 HOT RELOAD: Bot configuration updated without restart!');
             }
-            
+
             // Notificar clientes
             this.io.emit('config-updated', this.config);
         }
-        
+
         res.json(result);
     } catch (error) {
         logger.error('Error saving config:', error);
@@ -347,12 +347,12 @@ class BotServer {
             try {
                 const { mode } = req.body;
                 const result = this.configManager.updateMode(mode);
-                
+
                 if (result.success) {
                     this.config = this.configManager.getConfig();
                     this.io.emit('mode-changed', { mode });
                 }
-                
+
                 res.json(result);
             } catch (error) {
                 logger.error('Error updating mode:', error);
@@ -421,12 +421,12 @@ class BotServer {
             try {
                 const { filename } = req.body;
                 const result = this.configManager.restoreBackup(filename);
-                
+
                 if (result.success) {
                     this.config = this.configManager.getConfig();
                     this.io.emit('config-restored');
                 }
-                
+
                 res.json(result);
             } catch (error) {
                 this.metrics.errors++;
@@ -440,7 +440,7 @@ class BotServer {
                 const users = database.db.prepare(
                     'SELECT * FROM user_context ORDER BY last_interaction DESC'
                 ).all();
-                
+
                 res.json({
                     success: true,
                     data: users,
@@ -458,7 +458,7 @@ class BotServer {
                 const phone = req.params.phone;
                 const userContext = database.getUserContext(phone);
                 const conversations = database.getConversationHistory(phone, 100);
-                
+
                 res.json({
                     success: true,
                     data: {
@@ -479,7 +479,7 @@ class BotServer {
                 const sessions = database.db.prepare(
                     'SELECT * FROM sessions WHERE status = ? ORDER BY started_at DESC',
                 ).all('active');
-                
+
                 res.json({
                     success: true,
                     data: sessions,
@@ -496,7 +496,7 @@ class BotServer {
             try {
                 const sessionId = req.params.sessionId;
                 database.closeSession(sessionId);
-                
+
                 res.json({
                     success: true,
                     message: 'Session closed'
@@ -511,26 +511,26 @@ class BotServer {
         router.get('/metrics', (req, res) => {
             try {
                 const timeRange = req.query.range || '24h'; // 1h, 24h, 7d, 30d
-                
+
                 // Métricas de conversas por período
                 const conversationsMetrics = this.getConversationsMetrics(timeRange);
-                
+
                 // Métricas de sentimento
                 const sentimentMetrics = database.db.prepare(`
-                    SELECT sentiment, COUNT(*) as count 
-                    FROM conversations 
-                    WHERE sentiment IS NOT NULL 
+                    SELECT sentiment, COUNT(*) as count
+                    FROM conversations
+                    WHERE sentiment IS NOT NULL
                     GROUP BY sentiment
                 `).all();
-                
+
                 // Métricas de departamentos
                 const departmentMetrics = database.db.prepare(`
-                    SELECT department_id, COUNT(*) as count 
-                    FROM conversations 
-                    WHERE department_id IS NOT NULL 
+                    SELECT department_id, COUNT(*) as count
+                    FROM conversations
+                    WHERE department_id IS NOT NULL
                     GROUP BY department_id
                 `).all();
-                
+
                 res.json({
                     success: true,
                     data: {
@@ -551,23 +551,23 @@ class BotServer {
         router.post('/send-message', async (req, res) => {
             try {
                 const { phone, message } = req.body;
-                
+
                 if (!phone || !message) {
                     return res.status(400).json({
                         success: false,
                         error: 'Phone and message required'
                     });
                 }
-                
+
                 if (!this.whatsappBot || !this.whatsappBot.isReady) {
                     return res.status(503).json({
                         success: false,
                         error: 'WhatsApp bot not ready'
                     });
                 }
-                
+
                 const result = await this.whatsappBot.sendMessage(phone, message);
-                
+
                 if (result) {
                     this.metrics.messagesSent++;
                     res.json({
@@ -588,33 +588,33 @@ class BotServer {
         router.post('/broadcast', async (req, res) => {
             try {
                 const { message, phones } = req.body;
-                
+
                 if (!message || !phones || !Array.isArray(phones)) {
                     return res.status(400).json({
                         success: false,
                         error: 'Message and phones array required'
                     });
                 }
-                
+
                 if (!this.whatsappBot || !this.whatsappBot.isReady) {
                     return res.status(503).json({
                         success: false,
                         error: 'WhatsApp bot not ready'
                     });
                 }
-                
+
                 const results = [];
                 for (const phone of phones) {
                     const result = await this.whatsappBot.sendMessage(phone, message);
                     results.push({ phone, success: result });
-                    
+
                     // Delay entre mensagens para evitar ban
                     await this.sleep(2000);
                 }
-                
+
                 const successCount = results.filter(r => r.success).length;
                 this.metrics.messagesSent += successCount;
-                
+
                 res.json({
                     success: true,
                     message: `Broadcast sent to ${successCount}/${phones.length} contacts`,
@@ -632,14 +632,14 @@ class BotServer {
             try {
                 const limit = parseInt(req.query.limit) || 100;
                 const level = req.query.level || 'all';
-                
+
                 const logFile = path.join(__dirname, 'logs', 'combined.log');
                 const logs = fs.readFileSync(logFile, 'utf8')
                     .split('\n')
                     .filter(line => line.trim())
                     .slice(-limit)
                     .reverse();
-                
+
                 res.json({
                     success: true,
                     data: logs,
@@ -658,7 +658,7 @@ class BotServer {
                 const conversations = database.db.prepare(
                     'SELECT * FROM conversations ORDER BY timestamp DESC'
                 ).all();
-                
+
                 res.setHeader('Content-Type', 'application/json');
                 res.setHeader('Content-Disposition', `attachment; filename="conversations-${Date.now()}.json"`);
                 res.send(JSON.stringify(conversations, null, 2));
@@ -672,7 +672,7 @@ class BotServer {
         router.get('/export/training', (req, res) => {
             try {
                 const training = database.getTrainingData();
-                
+
                 res.setHeader('Content-Type', 'application/json');
                 res.setHeader('Content-Disposition', `attachment; filename="training-${Date.now()}.json"`);
                 res.send(JSON.stringify(training, null, 2));
@@ -687,14 +687,14 @@ class BotServer {
         router.post('/bot/restart', async (req, res) => {
             try {
                 logger.info('🔄 Restarting bot...');
-                
+
                 if (this.whatsappBot) {
                     await this.whatsappBot.stop();
                 }
-                
+
                 this.whatsappBot = new WhatsAppBot(this.config);
                 await this.whatsappBot.start();
-                
+
                 res.json({
                     success: true,
                     message: 'Bot restarted successfully'
@@ -712,7 +712,7 @@ class BotServer {
                     await this.whatsappBot.stop();
                     this.whatsappBot = null;
                 }
-                
+
                 res.json({
                     success: true,
                     message: 'Bot stopped'
@@ -755,34 +755,34 @@ class BotServer {
     // ============================================
     // WEBSOCKET / SOCKET.IO
     // ============================================
-    
+
     setupSocketIO() {
         this.io.on('connection', (socket) => {
             this.connectedClients.add(socket.id);
             logger.info(`📡 Client connected: ${socket.id} (Total: ${this.connectedClients.size})`);
-            
+
             // Enviar status inicial
             socket.emit('initial-status', {
                 bot: this.whatsappBot ? this.whatsappBot.getStatus() : { isReady: false },
                 stats: database.getStats(),
                 config: this.config
             });
-            
+
             // Ping/Pong para manter conexão
             const pingInterval = setInterval(() => {
                 socket.emit('ping', { timestamp: Date.now() });
             }, 30000);
-            
+
             socket.on('pong', (data) => {
                 // Cliente respondeu
             });
-            
+
             socket.on('disconnect', () => {
                 clearInterval(pingInterval);
                 this.connectedClients.delete(socket.id);
                 logger.info(`📡 Client disconnected: ${socket.id} (Total: ${this.connectedClients.size})`);
             });
-            
+
             // Eventos customizados
             socket.on('request-stats', () => {
                 socket.emit('stats-update', {
@@ -792,7 +792,7 @@ class BotServer {
                 });
             });
         });
-        
+
         // Broadcast periódico de estatísticas
         setInterval(() => {
             if (this.connectedClients.size > 0) {
@@ -804,78 +804,78 @@ class BotServer {
                 });
             }
         }, 10000); // A cada 10 segundos
-        
+
         logger.info('✅ Socket.IO configured');
     }
 
     // ============================================
     // ERROR HANDLERS
     // ============================================
-    
+
     setupErrorHandlers() {
         // Express error handler
         this.app.use((err, req, res, next) => {
             logger.error('Express error:', err);
             this.metrics.errors++;
-            
+
             res.status(err.status || 500).json({
                 success: false,
                 error: err.message || 'Internal server error',
                 ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
             });
         });
-        
+
         // Process error handlers
         process.on('uncaughtException', (error) => {
             logger.error('Uncaught Exception:', error);
             this.metrics.errors++;
         });
-        
+
         process.on('unhandledRejection', (reason, promise) => {
             logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
             this.metrics.errors++;
         });
-        
+
         // Graceful shutdown
         const shutdown = async (signal) => {
             logger.info(`\n🛑 ${signal} received. Shutting down gracefully...`);
-            
+
             // Parar de aceitar novas conexões
             this.server.close(() => {
                 logger.info('✅ HTTP server closed');
             });
-            
+
             // Desconectar todos os clientes WebSocket
             this.io.close(() => {
                 logger.info('✅ Socket.IO closed');
             });
-            
+
             // Parar bot do WhatsApp
             if (this.whatsappBot) {
                 await this.whatsappBot.stop();
                 logger.info('✅ WhatsApp bot stopped');
             }
-            
+
             // Fechar conexões de banco de dados
             if (database.db) {
                 database.db.close();
                 logger.info('✅ Database closed');
             }
-            
+
             logger.info('👋 Shutdown complete. Goodbye!');
             process.exit(0);
         };
-        
+
         process.on('SIGTERM', () => shutdown('SIGTERM'));
         process.on('SIGINT', () => shutdown('SIGINT'));
-        
+
         logger.info('✅ Error handlers configured');
     }
 
     // ============================================
     // START SERVER
     // ============================================
-    
+
     async startServer() {
         try {
             // Iniciar servidor HTTP
@@ -884,26 +884,26 @@ class BotServer {
                 logger.info(`📊 Access dashboard at http://localhost:${this.PORT}/dashboard`);
                 console.log(`\n🌐 Dashboard disponível em: http://localhost:${this.PORT}\n`);
             });
-            
+
             // Treinar IA inicial
             logger.info('🧠 Checking AI training data...');
             const trainingCount = await AITrainer.seedInitialTraining();
-            
+
             if (trainingCount > 0) {
                 logger.info(`✅ AI trained with ${trainingCount} examples`);
             }
-            
+
             // Inicializar bot do WhatsApp
             logger.info('📱 Initializing WhatsApp Bot...');
             this.whatsappBot = new WhatsAppBot(this.config);
             await this.whatsappBot.start();
-            
+
             // Iniciar limpeza automática de segurança
             security.startCleanupInterval();
-            
+
             // Banner de sucesso
             this.printSuccessBanner();
-            
+
         } catch (error) {
             logger.error('Failed to start server:', error);
             throw error;
@@ -913,13 +913,13 @@ class BotServer {
     // ============================================
     // UTILITY FUNCTIONS
     // ============================================
-    
+
     formatUptime(ms) {
         const seconds = Math.floor(ms / 1000);
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
-        
+
         if (days > 0) return `${days}d ${hours % 24}h`;
         if (hours > 0) return `${hours}h ${minutes % 60}m`;
         if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
@@ -933,14 +933,14 @@ class BotServer {
             '7d': 604800000,
             '30d': 2592000000
         };
-        
+
         const ms = ranges[timeRange] || ranges['24h'];
         const since = Date.now() - ms;
-        
+
         const count = database.db.prepare(
             "SELECT COUNT(*) as count FROM conversations WHERE timestamp > datetime(?, 'unixepoch', 'localtime')"
         ).get(since / 1000);
-        
+
         return {
             timeRange,
             count: count.count,
@@ -972,7 +972,7 @@ class BotServer {
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
         `);
-        
+
         logger.info('✅ System fully operational!');
     }
 }
@@ -985,15 +985,15 @@ class BotServer {
 console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║    🤖 WHATSAPP BOT AI - BLACKCORE v1.0                   ║
+║    🤖 WHATSAPP BOT AI - Octávio Augusto v1.0                   ║
 ║    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   ║
 ║                                                           ║
 ║    📱 Bot Inteligente com IA Local                       ║
 ║    🧠 Aprendizado Contínuo                               ║
-║    🔒 Segurança Militar                                  ║
+║    🔒 Segurança Avançada                                  ║
 ║    ⚡ Ultra Modular & Enterprise Grade                   ║
 ║                                                           ║
-║    Desenvolvido por: Octávio - BLACKCORE                 ║
+║    Desenvolvido por: Octávio - Octávio Augusto                 ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
 

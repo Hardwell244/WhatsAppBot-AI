@@ -31,7 +31,7 @@ class AITrainer {
             { input: 'ate que horas atendem', output: 'Atendemos até as 18h de segunda a sexta-feira.' },
             
             // Perguntas sobre empresa
-            { input: 'quem e voces', output: 'Somos a BLACKCORE, empresa especializada em desenvolvimento de software e soluções tecnológicas!' },
+            { input: 'quem e voces', output: 'Somos a Octávio Augusto, empresa especializada em desenvolvimento de software e soluções tecnológicas!' },
             { input: 'o que voces fazem', output: 'Desenvolvemos sistemas personalizados, sites, aplicativos e soluções em SaaS para empresas!' },
             
             // Vendas

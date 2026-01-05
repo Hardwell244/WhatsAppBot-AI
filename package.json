@@ -1,16 +1,64 @@
 {
-  "name": "whatsappbot-ai-blackcore",
+  "name": "whatsappbot-ai-octavioaugusto",
   "version": "1.0.0",
-  "description": "Bot WhatsApp Inteligente com IA Local - BLACKCORE",
+  "description": "Bot WhatsApp Inteligente com IA Local - Octávio Augusto - Sistema profissional de atendimento automatizado",
   "main": "index.js",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js",
+    "dev": "nodemon index.js",
+    "prod": "NODE_ENV=production node index.js",
     "train": "node ai/train.js",
-    "dashboard": "node dashboard/server.js"
+    "dashboard": "node dashboard/server.js",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\"",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "docker:build": "docker build -t whatsapp-bot-ai:latest .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:prod": "docker-compose up -d",
+    "backup:db": "node scripts/backup-database.js",
+    "backup:config": "node scripts/backup-config.js",
+    "restore:db": "node scripts/restore-database.js",
+    "health": "node scripts/health-check.js",
+    "audit": "npm audit --production",
+    "audit:fix": "npm audit fix"
   },
-  "keywords": ["whatsapp", "bot", "ai", "chatbot"],
-  "author": "BLACKCORE - Octávio",
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "ai",
+    "chatbot",
+    "nlp",
+    "machine-learning",
+    "automation",
+    "customer-service",
+    "whatsapp-api",
+    "intelligent-bot"
+  ],
+  "author": {
+    "name": "Octávio - Octávio Augusto",
+    "email": "contato@octavioaugusto.dev",
+    "url": "https://github.com/seu-usuario"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/WhatsAppBot-AI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/WhatsAppBot-AI/issues"
+  },
+  "homepage": "https://github.com/seu-usuario/WhatsAppBot-AI#readme",
   "license": "MIT",
   "dependencies": {
     "whatsapp-web.js": "^1.23.0",
@@ -29,6 +77,67 @@
     "moment": "^2.29.4",
     "compromise": "^14.10.0",
     "sentiment": "^5.0.2",
-    "puppeteer": "^21.6.0"
+    "puppeteer": "^21.6.0",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.1.5",
+    "joi": "^17.11.0",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.1",
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "@types/node": "^20.10.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "concurrently": "^8.2.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "nodemonConfig": {
+    "watch": [
+      "*.js",
+      "ai/",
+      "config/",
+      "database/",
+      "modules/",
+      "security/",
+      "logs/"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "node_modules/",
+      "sessions/",
+      "database/*.db",
+      "logs/"
+    ],
+    "delay": "1000"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!tests/**",
+      "!**/node_modules/**"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js",
+      "**/tests/**/*.spec.js"
+    ],
+    "verbose": true
   }
 }

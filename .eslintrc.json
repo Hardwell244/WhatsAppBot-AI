@@ -1,0 +1,73 @@
+{
+  "env": {
+    "browser": false,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "semi": ["error", "always"],
+    "no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    "no-console": "off",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-arrow-callback": "warn",
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "comma-dangle": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "space-before-function-paren": ["error", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "keyword-spacing": ["error", { "before": true, "after": true }],
+    "space-infix-ops": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "brace-style": ["error", "1tbs"],
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+    "no-trailing-spaces": "error",
+    "eol-last": ["error", "always"],
+    "max-len": ["warn", {
+      "code": 120,
+      "ignoreComments": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "no-param-reassign": "warn",
+    "prefer-template": "warn",
+    "template-curly-spacing": ["error", "never"],
+    "no-useless-concat": "error",
+    "prefer-destructuring": ["warn", {
+      "array": false,
+      "object": true
+    }],
+    "no-implicit-coercion": "error",
+    "no-throw-literal": "error",
+    "prefer-promise-reject-errors": "error",
+    "require-await": "warn",
+    "no-return-await": "error",
+    "no-async-promise-executor": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js", "*.spec.js"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}
